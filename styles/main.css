@@ -3,6 +3,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: #dbdbd3;
 }
 .cell{
     display: flex;
@@ -19,6 +20,8 @@ body{
     flex-wrap: wrap;
     width: 700px;
     height: 700px;
+    padding: 0px;
+    margin: 0px;
     gap: 0px;
     justify-items:center;
     align-items: center;
@@ -44,7 +47,7 @@ button{
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
-    cursor: pointer;
+    border: 4px solid #333;
 }
 h1{
     font-size: 24px;

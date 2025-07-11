@@ -19,13 +19,40 @@ function init() {
     let obstacles = []
     let cells = []
     const minDistanceBetweenObstacles = 2;
+    let currentimg = 0;
+    // found this function on stackoverflow, it updates a css rule, or creates it if it does not exist.
+    // https://stackoverflow.com/questions/6620393/is-it-possible-to-alter-a-css-stylesheet-using-javascript-not-the-style-of-an
+    function updateCSSRule(selector, property, value) {
+        selector = selector.toLowerCase();
+        property = property.toLowerCase();
+        value = value.toLowerCase();
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            let sheet = document.styleSheets[i];
+
+            try {
+                let rules = sheet.cssRules || sheet.rules;
+                for (let j = 0; j < rules.length; j++) {
+                    let rule = rules[j];
+                    if (rule.selectorText && rule.selectorText.toLowerCase() === selector) {
+                        rule.style[property] = value;
+                        return;
+                    }
+                }
+
+                sheet.insertRule(`${selector} { ${property}: ${value}; }`, rules.length);
+                return;
+
+            } catch (e) {
+                continue;
+            }
+        }
+    }
 
     function animateBird() {
-        const img = ["./Assets/bird1.png", "./Assets/bird2.png", "./Assets/bird3.png"];
+        const img = ["../Assets/bird1.png", "../Assets/bird2.png", "../Assets/bird3.png"];
 
         currentimg = (currentimg + 1) % img.length; // increment currentimg, wrapping around to 0 when it reaches the end
-        birdElem.style.backgroundImage = `url(${img[currentimg]})`;
-        birdElem.style.backgroundSize = "cover";
+        updateCSSRule(".player", "background-image", `url(${img[currentimg]})`);
     }
     function createGrid() {
         //remove previous grid by emptying ALL the elements
@@ -91,7 +118,7 @@ function init() {
         renderObstacles();
     }
     function checkForCollision() {
-        if (playerPos[0] < 1 || playerPos[0] >= gridSize-1 || playerPos[1] < 1 || playerPos[1] >= gridSize-1) {
+        if (playerPos[0] < 1 || playerPos[0] >= gridSize - 1 || playerPos[1] < 1 || playerPos[1] >= gridSize - 1) {
             return true; // out of bounds
         }
         if (cells[playerPos[0]][playerPos[1]].classList.contains("obstacle")) {
@@ -102,15 +129,17 @@ function init() {
 
     function update() {
         if (gameRunning == false) {
+            startButton.textContent = "Start Game";
             return;
         }
+        startButton.textContent = "Restart Game";
         movePlayer(0, -1); // gravity
         updateObstacles();
         if (checkForCollision() == true) {
             gameRunning = false;
             console.log("Game Over");
         }
-        // animateBird();
+        animateBird();
     }
     function start() {
         createGrid();
