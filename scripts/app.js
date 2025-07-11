@@ -268,6 +268,9 @@ function init() {
         gridElem.focus();
         start();
     })
+    window.addEventListener("click", function(){
+                gridElem.focus();
+    })
 
 }
 
