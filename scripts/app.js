@@ -1,24 +1,47 @@
-// flappy bird 
+// the reason why I have some variables here is because I want to access them in the console
 const gridSize = 15; // grid (10x10)
 const gridSizePx = 700; // must be the same as the css width and height
-const cellSize = (gridSizePx / gridSize); // idk why but -3 is needed to fit
+const cellSize = (gridSizePx / gridSize);
 let gameRunning = false;
+let minDistanceBetweenObstacles = 2;
+let gapHeightObstacles = 10;
+let gapSizeMin = 3;
+let timer = 0;
 
-
+const difficultiesList = {
+    "easy": {
+        minDistanceBetweenObstacles: 5,
+        gapHeightObstacles: 12,
+        gapSizeMin: 4
+    },
+    "medium": {
+        minDistanceBetweenObstacles: 3,
+        gapHeightObstacles: 9,
+        gapSizeMin: 3
+    },
+    "hard": {
+        minDistanceBetweenObstacles: 2,
+        gapHeightObstacles: 5,
+        gapSizeMin: 2
+    }
+}
+let currentDifficulty = "medium";
 
 function generateRandomObstacle() {
     let newGapY = Math.random() * 4
-    const gapHeight = Math.max(Math.random() * 10, 3);
+    const gapHeight = Math.max(Math.random() * gapHeightObstacles, gapSizeMin);
     const x = gridSize;
     return { x, gapY: newGapY, gapHeight: gapHeight };
 }
 function init() {
     const gridElem = document.querySelector(".grid")
-    const startButton = document.getElementById("start-button");
+    const startButtonElem = document.getElementById("start-button");
+    const displayTextElem = document.getElementById("displayText");
+
+    const updateInterval = 300; // ms
     let playerPos = [5, 5];
     let obstacles = []
     let cells = []
-    const minDistanceBetweenObstacles = 2;
     let currentimg = 0;
     // found this function on stackoverflow, it updates a css rule, or creates it if it does not exist.
     // https://stackoverflow.com/questions/6620393/is-it-possible-to-alter-a-css-stylesheet-using-javascript-not-the-style-of-an
@@ -51,16 +74,16 @@ function init() {
     function animateBird() {
         const img = ["../Assets/bird1.png", "../Assets/bird2.png", "../Assets/bird3.png"];
 
-        currentimg = (currentimg + 1) % img.length; // increment currentimg, wrapping around to 0 when it reaches the end
+        currentimg = (currentimg + 1) % img.length; // fun trick to cycle, when image reaches 2, this will reset it to 0 because (2+1) % 3 = 0
         updateCSSRule(".player", "background-image", `url(${img[currentimg]})`);
     }
     function createGrid() {
+        timer = 0;
         //remove previous grid by emptying ALL the elements
         gridElem.innerHTML = "";
         cells = [];
         playerPos = [5, 5];
         obstacles = [];
-        playerPos = [5, 5];
 
         gridElem.style.width = `${gridSizePx}px`;
         gridElem.style.height = `${gridSizePx}px`;
@@ -109,7 +132,7 @@ function init() {
         obstacles = obstacles.filter(obs => obs.x >= 0);
 
         const lastX = obstacles.length > 0 ? Math.max(...obstacles.map(o => o.x)) : -10;
-        if (gridSize - lastX > minDistanceBetweenObstacles) {
+        if (gridSize - lastX > minDistanceBetweenObstacles + Math.random() * 2) {
             const newObstacle = generateRandomObstacle();
             lastObstacleGapY = newObstacle.gapY;
             obstacles.push(newObstacle);
@@ -128,29 +151,57 @@ function init() {
     }
 
     function update() {
+        timer += updateInterval;
         if (gameRunning == false) {
-            startButton.textContent = "Start Game";
+            startButtonElem.textContent = "Start Game";
             return;
         }
-        startButton.textContent = "Restart Game";
+        startButtonElem.textContent = "Restart Game";
         movePlayer(0, -1); // gravity
         updateObstacles();
+        displayTextElem.textContent = `Timer: ${Math.floor(timer / 1000)}s`;
+
         if (checkForCollision() == true) {
             gameRunning = false;
-            console.log("Game Over");
+            displayTextElem.textContent = "Game Over! Click to Restart";
         }
         animateBird();
+        if(timer / 1000 >= 30) {
+            displayTextElem.textContent = "You win! Click to Restart";
+            gameRunning = false;
+        }
+    }
+    function updateDifficulty() {
+        switch (currentDifficulty) {
+            case "easy":
+                minDistanceBetweenObstacles = difficultiesList.easy.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.easy.gapHeightObstacles;
+                gapSizeMin = difficultiesList.easy.gapSizeMin;
+                break;
+            case "medium":
+                minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
+                gapSizeMin = difficultiesList.medium.gapSizeMin;
+                break;
+            case "hard":
+                minDistanceBetweenObstacles = difficultiesList.hard.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.hard.gapHeightObstacles;
+                gapSizeMin = difficultiesList.hard.gapSizeMin;
+                break;
+            default:
+                minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
+                gapSizeMin = difficultiesList.medium.gapSizeMin;
+                break;
+        }
     }
     function start() {
+        updateDifficulty();
         createGrid();
         updatePlayerPosition();
     }
-
-    function handleUserInput(e) {
-
-    }
     start()
-    setInterval(update, 300);
+    setInterval(update, updateInterval);
     window.addEventListener("keydown", (e) => {
         if (gameRunning == false) {
             return;
@@ -170,10 +221,10 @@ function init() {
         }
         movePlayer(0, 2);
     });
-    startButton.addEventListener("click", () => {
+    startButtonElem.addEventListener("click", () => {
         gameRunning = true;
         gridElem.focus();
-        createGrid();
+        start();
     })
 
 }
