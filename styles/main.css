@@ -1,0 +1,28 @@
+.cell{
+    border: 1px solid green;
+    width: 55px;
+    height: 55px;
+    display: flex;
+
+}
+.grid-wrapper{
+    display: flex;
+}
+.grid{
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 600px;
+    height: 600px;
+    gap: 1px;
+    background-color:antiquewhite;
+    flex-direction: column-reverse;
+}
+
+.player{
+    width: 55px;
+    height: 55px;
+    background-image: url("../Assets/29-duck-png-image.png");
+    background-size: cover;
+    transition:linear;
+    transition-duration: 0.5s;
+}
