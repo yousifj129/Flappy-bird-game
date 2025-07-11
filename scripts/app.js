@@ -1,28 +1,38 @@
 // the reason why I have some variables here is because I want to access them in the console
 const gridSize = 15; // grid (10x10)
-const gridSizePx = 700; // must be the same as the css width and height
+let gridSizePx = 700; // must be the same as the css width and height
+if(window.innerWidth   <= 800){
+    gridSizePx = window.innerWidth - 100;
+}
+
 const cellSize = (gridSizePx / gridSize);
 let gameRunning = false;
 let minDistanceBetweenObstacles = 2;
 let gapHeightObstacles = 10;
 let gapSizeMin = 3;
 let timer = 0;
+let updateInterval = 300; // ms
+console.log(window.innerWidth );
+
 
 const difficultiesList = {
     "easy": {
         minDistanceBetweenObstacles: 5,
         gapHeightObstacles: 12,
-        gapSizeMin: 4
+        gapSizeMin: 4,
+        updateInterval: 300 
     },
     "medium": {
         minDistanceBetweenObstacles: 3,
         gapHeightObstacles: 9,
-        gapSizeMin: 3
+        gapSizeMin: 3,
+        updateInterval: 250 
     },
     "hard": {
         minDistanceBetweenObstacles: 2,
         gapHeightObstacles: 5,
-        gapSizeMin: 2
+        gapSizeMin: 2,
+        updateInterval: 200 
     }
 }
 let currentDifficulty = "medium";
@@ -38,11 +48,11 @@ function init() {
     const startButtonElem = document.getElementById("start-button");
     const displayTextElem = document.getElementById("displayText");
     const difficultySelectElem = document.getElementById("difficulty-select");
-    const updateInterval = 300; // ms
     let playerPos = [5, 5];
     let obstacles = []
     let cells = []
     let currentimg = 0;
+    let intrevalID = null;
     // found this function on stackoverflow, it updates a css rule, or creates it if it does not exist.
     // https://stackoverflow.com/questions/6620393/is-it-possible-to-alter-a-css-stylesheet-using-javascript-not-the-style-of-an
     function updateCSSRule(selector, property, value) {
@@ -163,11 +173,11 @@ function init() {
 
         if (checkForCollision() == true) {
             gameRunning = false;
-            displayTextElem.textContent = "Game Over! Click to Restart";
+            displayTextElem.innerText = `Game Over! Click the start button to play again` + "\n" + `You survived for ${Math.floor(timer / 1000)} seconds`;
         }
         animateBird();
-        if(timer / 1000 >= 30) {
-            displayTextElem.textContent = "You win! Click to Restart";
+        if (timer / 1000 >= 30) {
+            displayTextElem.innerText = `You win! Click the start button to play again`;
             gameRunning = false;
         }
     }
@@ -178,31 +188,36 @@ function init() {
                 minDistanceBetweenObstacles = difficultiesList.easy.minDistanceBetweenObstacles;
                 gapHeightObstacles = difficultiesList.easy.gapHeightObstacles;
                 gapSizeMin = difficultiesList.easy.gapSizeMin;
+                updateInterval = difficultiesList.easy.updateInterval;
                 break;
             case "medium":
                 minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
                 gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
                 gapSizeMin = difficultiesList.medium.gapSizeMin;
+                updateInterval = difficultiesList.medium.updateInterval;
                 break;
             case "hard":
                 minDistanceBetweenObstacles = difficultiesList.hard.minDistanceBetweenObstacles;
                 gapHeightObstacles = difficultiesList.hard.gapHeightObstacles;
                 gapSizeMin = difficultiesList.hard.gapSizeMin;
+                updateInterval = difficultiesList.hard.updateInterval;
                 break;
             default:
                 minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
                 gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
                 gapSizeMin = difficultiesList.medium.gapSizeMin;
+                updateInterval = difficultiesList.medium.updateInterval;
                 break;
         }
     }
     function start() {
+        clearInterval(intrevalID);
         updateDifficulty();
         createGrid();
         updatePlayerPosition();
+        intrevalID =  setInterval(update, updateInterval);
     }
     start()
-    setInterval(update, updateInterval);
     window.addEventListener("keydown", (e) => {
         if (gameRunning == false) {
             return;
@@ -230,5 +245,8 @@ function init() {
 
 }
 
-
+function showInstructions() {
+    let popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+}
 document.addEventListener("DOMContentLoaded", init)

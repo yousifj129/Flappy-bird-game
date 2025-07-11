@@ -13,16 +13,22 @@
   <h1>Flappy Bird Game</h1>
 
   <h2 id="displayText">To play, click on start</h2>
+
   <div class="grid-wrapper">
     <div class="grid"></div>
   </div>
   <div id="UI-down">
-    <button id="start-button">Start Game</button>
+    <button class="popup" onclick="showInstructions()">How To Play
+      <span class="popuptext" id="myPopup">You have to avoid obstacles and survive for 30 seconds! <br> you can jump by
+        clicking on the screen or pressing w or the up arrow</span>
+    </button>
     <select id="difficulty-select">
       <option value="easy">Easy</option>
       <option value="medium">Medium</option>
       <option value="hard">Hard</option>
     </select>
+    <button id="start-button">Start Game</button>
+
   </div>
 
 </body>
