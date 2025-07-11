@@ -20,7 +20,7 @@ body{
     flex-wrap: wrap;
     width: 700px;
     height: 700px;
-    padding: 0px;
+    padding: 2px; /* for some reason, obstacles look weird without it*/
     margin: 0px;
     gap: 0px;
     justify-items:center;
@@ -36,12 +36,16 @@ body{
     height: 55px;
     background-image: url("../Assets/bird1.png");
     background-size: cover;
-    transition: 0.5s ease-in-out;
+}
+.cell.player.obstacle{
+    
+    background-image: url("../Assets/bird-dead.png"), url("../Assets/building1.png");
+    background-size: cover;
 }
 .obstacle{
     width: 55px;
     height: 55px;
-    background-color: green;
+    background-image: url("../Assets/building1.png");
     background-size: cover;
 }
 button, select, option{

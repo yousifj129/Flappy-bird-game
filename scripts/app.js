@@ -17,9 +17,6 @@ let timer = 0;
 let updateInterval = 300; // ms
 let soundVolume = 0.5;
 
-console.log(window.innerWidth);
-
-
 const difficultiesList = {
     "easy": {
         minDistanceBetweenObstacles: 5,
@@ -226,13 +223,14 @@ function init() {
         }
         animateBird();
         if (timer / 1000 >= 30) {
+            backgroundSoundElem.pause();
             displayTextElem.innerText = `You win! Click on start or jump to play again`;
             gameRunning = false;
         }
     }
     function start() {
         if(gameRunning){
-        playSound(backgroundSoundElem, 0.2);
+        playSound(backgroundSoundElem, 0.3);
 
         }
         clearInterval(intrevalID);
