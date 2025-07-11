@@ -1,19 +1,20 @@
 .cell{
     border: 1px solid green;
-    width: 55px;
-    height: 55px;
     display: flex;
-
+    width: 60px;
+    height: 60px;
 }
 .grid-wrapper{
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .grid{
     display: inline-flex;
     flex-wrap: wrap;
-    width: 600px;
-    height: 600px;
-    gap: 1px;
+    width: 700px;
+    height: 700px;
+    gap: 0px;
     background-color:antiquewhite;
     flex-direction: column-reverse;
 }
