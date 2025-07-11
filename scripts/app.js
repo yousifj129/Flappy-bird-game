@@ -2,7 +2,7 @@
 const gridSize = 15; // grid (10x10)
 const gridSizePx = 700; // must be the same as the css width and height
 const cellSize = (gridSizePx / gridSize) - 3; // idk why but -3 is needed to fit
-
+let gameRunning = false;
 
 
 
@@ -14,6 +14,7 @@ function generateRandomObstacle() {
 }
 function init() {
     const gridElem = document.querySelector(".grid")
+    const startButton = document.getElementById("start-button");
     let playerPos = [5, 5];
     let obstacles = []
     let cells = []
@@ -21,6 +22,13 @@ function init() {
     const minDistanceBetweenObstacles = 4;
 
     function createGrid() {
+        //remove previous grid by emptying ALL the elements
+        gridElem.innerHTML = "";
+        cells = [];
+        playerPos = [5, 5];
+        obstacles = [];
+        playerPos = [5,5];
+
         gridElem.style.width = `${gridSizePx}px`;
         gridElem.style.height = `${gridSizePx}px`;
         for (let i = 0; i < gridSize; i++) {
@@ -76,12 +84,26 @@ function init() {
 
         renderObstacles();
     }
-
+    function checkForCollision() {
+        if( playerPos[0] < 0 || playerPos[0] >= gridSize || playerPos[1] < 0 || playerPos[1] >= gridSize) {
+            return true; // out of bounds
+        }
+        if(cells[playerPos[0]][playerPos[1]].classList.contains("obstacle")) {
+            return true; // collision
+        }
+        return false
+    }
 
     function update() {
+        if(gameRunning == false) {
+            return;
+        }
         movePlayer(0, -1); // gravity
         updateObstacles();
-
+        if(checkForCollision() == true){
+            gameRunning = false;
+            console.log("Game Over");
+        }
     }
     function start() {
         createGrid();
@@ -92,12 +114,19 @@ function init() {
     start()
     setInterval(update, 300);
     window.addEventListener("keydown", (e) => {
+        if(gameRunning == false) {
+            return;
+        }
         switch (e.key) {
             case "ArrowUp":
                 movePlayer(0, 2);
                 break;
         }
     });
+    startButton.addEventListener("click", () => {
+        gameRunning = true;
+        createGrid();
+    })
 
 }
 
