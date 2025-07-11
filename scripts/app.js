@@ -1,7 +1,7 @@
 // the reason why I have some variables here is because I want to access them in the console
 const gridSize = 15; // grid (10x10)
 let gridSizePx = 800; // must be the same as the css width and height
-if (window.innerWidth <= 800) {
+if (window.innerWidth <= 900) {
     gridSizePx = window.innerWidth - 100;
 }
 if (window.innerHeight <= 720) {
@@ -27,13 +27,13 @@ const difficultiesList = {
     "medium": {
         minDistanceBetweenObstacles: 3,
         gapHeightObstacles: 9,
-        gapSizeMin: 3,
+        gapSizeMin: 4,
         updateInterval: 250
     },
     "hard": {
         minDistanceBetweenObstacles: 2,
         gapHeightObstacles: 6,
-        gapSizeMin: 2,
+        gapSizeMin: 3,
         updateInterval: 200
     }
 }
@@ -194,6 +194,7 @@ function init() {
 
         renderObstacles();
     }
+
     function checkForCollision() {
         if (playerPos[0] < 1 || playerPos[0] >= gridSize - 1 || playerPos[1] < 1 || playerPos[1] >= gridSize - 1) {
             return true; // out of bounds
@@ -203,7 +204,14 @@ function init() {
         }
         return false
     }
-
+    function winOrLose() {
+        if (checkForCollision() == true) {
+            playSound(hitSoundElem, 0.7);
+            backgroundSoundElem.pause()
+            gameRunning = false;
+            displayTextElem.innerText = `Game Over! Click on start or jump to play again` + "\n" + `You survived for ${Math.floor(timer / 1000)} seconds`;
+        }
+    }
     function update() {
         timer += updateInterval;
         if (gameRunning == false) {
@@ -215,12 +223,7 @@ function init() {
         updateObstacles();
         displayTextElem.textContent = `Timer: ${Math.floor(timer / 1000)}s`;
 
-        if (checkForCollision() == true) {
-            playSound(hitSoundElem,0.7);
-            backgroundSoundElem.pause()
-            gameRunning = false;
-            displayTextElem.innerText = `Game Over! Click on start or jump to play again` + "\n" + `You survived for ${Math.floor(timer / 1000)} seconds`;
-        }
+        winOrLose();
         animateBird();
         if (timer / 1000 >= 30) {
             backgroundSoundElem.pause();
@@ -229,8 +232,8 @@ function init() {
         }
     }
     function start() {
-        if(gameRunning){
-        playSound(backgroundSoundElem, 0.3);
+        if (gameRunning) {
+            playSound(backgroundSoundElem, 0.3);
 
         }
         clearInterval(intrevalID);
@@ -250,14 +253,20 @@ function init() {
             }
             movePlayer(0, 2);
             playSound(jumpSoundElem);
+            winOrLose();
         }
+
     });
-    window.addEventListener("click", (e) => {
+    window.addEventListener("click", () => {
         if (gameRunning == false) {
             return;
         }
+        winOrLose();
+
         movePlayer(0, 2);
         playSound(jumpSoundElem);
+
+
 
     });
     volumeSliderElem.addEventListener("input", (e) => {
@@ -268,8 +277,8 @@ function init() {
         gridElem.focus();
         start();
     })
-    window.addEventListener("click", function(){
-                gridElem.focus();
+    window.addEventListener("click", function () {
+        gridElem.focus();
     })
 
 }
