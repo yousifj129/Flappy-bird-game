@@ -20,7 +20,15 @@ function init() {
             cells.push(row); 
         }
     }
-    
+    function movePlayer(x, y) {
+        const newX = playerPos[0] + x;
+        const newY = playerPos[1] + y;
+
+        if (newX >= 0 && newX < gridSize && newY >= 0 && newY < gridSize) {
+            playerPos = [newX, newY];
+            updatePlayerPosition();
+        }
+    }
     function updatePlayerPosition() {
         cells.forEach(row => row.forEach(cell => cell.classList.remove("player")));
         const playerCell = cells[playerPos[0]][playerPos[1]];
