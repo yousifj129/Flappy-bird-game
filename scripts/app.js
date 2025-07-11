@@ -1,34 +1,39 @@
+// flappy bird 
 const gridSize = 15; // grid (10x10)
 const gridSizePx = 700; // must be the same as the css width and height
 const cellSize = (gridSizePx / gridSize) - 3; // idk why but -3 is needed to fit
-// Each obstacle is at a column (x), with a gap from y = gapY to y+gapHeight
-const obstaclePatterns = [
-  { x: 15, gapY: 5, gapHeight: 3 },
-  { x: 15, gapY: 7, gapHeight: 4 },
-  { x: 15, gapY: 4, gapHeight: 3 }
-];
 
 
+
+
+function generateRandomObstacle() {
+    let newGapY = Math.random()*4
+    const gapHeight = Math.max(Math.random()*10, 3);
+    const x = gridSize;
+    return { x, gapY: newGapY, gapHeight: gapHeight };
+}
 function init() {
     const gridElem = document.querySelector(".grid")
-    let playerPos = [5, 5]; 
+    let playerPos = [5, 5];
     let obstacles = []
     let cells = []
+    let lastObstacleGapY = 6;
+    const minDistanceBetweenObstacles = 4;
 
     function createGrid() {
-        gridElem.style.width = ${gridSizePx}px;
-        gridElem.style.height = ${gridSizePx}px;
+        gridElem.style.width = `${gridSizePx}px`;
+        gridElem.style.height = `${gridSizePx}px`;
         for (let i = 0; i < gridSize; i++) {
             let row = [];
             for (let j = 0; j < gridSize; j++) {
                 const cell = document.createElement("div")
                 row.push(cell);
                 cell.className = "cell"
-                cell.style.width = ${cellSize}px
-                cell.style.height = ${cellSize}px
+                cell.style.width = `${cellSize}px`
+                cell.style.height = `${cellSize}px`
                 gridElem.append(cell)
             }
-            cells.push(row); 
+            cells.push(row);
         }
     }
     function movePlayer(x, y) {
@@ -46,30 +51,46 @@ function init() {
         playerCell.classList.add("player");
     }
     function renderObstacles() {
-    for (const obs of obstaclePatterns) {
-        for (let y = 0; y < gridSize; y++) {
-            // If this y is inside the gap, skip
-            if (y >= obs.gapY && y < obs.gapY + obs.gapHeight) continue;
+        cells.forEach(col => col.forEach(cell => cell.classList.remove("obstacle")));
 
-            
-            const obstacleCell = cells[obs.x][y];
-            obstacleCell.classList.add("obstacle");
+        for (const obs of obstacles) {
+            for (let y = 0; y < gridSize; y++) {
+                if (y >= obs.gapY && y < obs.gapY + obs.gapHeight) continue;
+
+                if (obs.x >= 0 && obs.x < gridSize) {
+                    cells[obs.x][y].classList.add("obstacle");
+                }
+            }
         }
     }
-}
+    function updateObstacles() {
+        for (let obs of obstacles) obs.x -= 1;
+        obstacles = obstacles.filter(obs => obs.x >= 0);
+
+        const lastX = obstacles.length > 0 ? Math.max(...obstacles.map(o => o.x)) : -10;
+        if (gridSize - lastX > minDistanceBetweenObstacles) {
+            const newObstacle = generateRandomObstacle();
+            lastObstacleGapY = newObstacle.gapY;
+            obstacles.push(newObstacle);
+        }
+
+        renderObstacles();
+    }
+
 
     function update() {
         movePlayer(0, -1); // gravity
+        updateObstacles();
+
     }
     function start() {
         createGrid();
         updatePlayerPosition();
-        renderObstacles();
     }
 
-    
+
     start()
-    setInterval(update, 300); 
+    setInterval(update, 300);
     window.addEventListener("keydown", (e) => {
         switch (e.key) {
             case "ArrowUp":
@@ -77,7 +98,7 @@ function init() {
                 break;
         }
     });
-    
+
 }
 
 
