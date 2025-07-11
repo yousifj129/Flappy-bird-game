@@ -37,7 +37,7 @@ function init() {
     const gridElem = document.querySelector(".grid")
     const startButtonElem = document.getElementById("start-button");
     const displayTextElem = document.getElementById("displayText");
-
+    const difficultySelectElem = document.getElementById("difficulty-select");
     const updateInterval = 300; // ms
     let playerPos = [5, 5];
     let obstacles = []
@@ -172,6 +172,7 @@ function init() {
         }
     }
     function updateDifficulty() {
+        currentDifficulty = difficultySelectElem.value;
         switch (currentDifficulty) {
             case "easy":
                 minDistanceBetweenObstacles = difficultiesList.easy.minDistanceBetweenObstacles;

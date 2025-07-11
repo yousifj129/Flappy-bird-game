@@ -1,2 +1,3 @@
-# whack-a-duck
-very poorly coded whack-a-duck game, because I was doing everything without actually thinking.
+# flappy bird!!
+
+source of bird image: <a href="https://ma9ici4n.itch.io/pixel-art-bird-16x16">aa<a>
