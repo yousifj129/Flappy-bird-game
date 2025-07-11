@@ -110,7 +110,9 @@ function init() {
         updatePlayerPosition();
     }
 
-
+    function handleUserInput(e){
+        
+    }
     start()
     setInterval(update, 300);
     window.addEventListener("keydown", (e) => {
@@ -121,10 +123,20 @@ function init() {
             case "ArrowUp":
                 movePlayer(0, 2);
                 break;
+            case "w":
+                movePlayer(0, 2);
+                break;
         }
+    });
+    window.addEventListener("click", (e) => {
+        if(gameRunning == false) {
+            return;
+        }
+        movePlayer(0, 2);
     });
     startButton.addEventListener("click", () => {
         gameRunning = true;
+        gridElem.focus();
         createGrid();
     })
 

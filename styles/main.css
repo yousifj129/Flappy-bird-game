@@ -41,3 +41,15 @@ body{
     background-color: green;
     background-size: cover;
 }
+button{
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+h1{
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
