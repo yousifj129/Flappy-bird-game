@@ -1,14 +1,14 @@
 // flappy bird 
 const gridSize = 15; // grid (10x10)
 const gridSizePx = 700; // must be the same as the css width and height
-const cellSize = (gridSizePx / gridSize) - 3; // idk why but -3 is needed to fit
+const cellSize = (gridSizePx / gridSize); // idk why but -3 is needed to fit
 let gameRunning = false;
 
 
 
 function generateRandomObstacle() {
-    let newGapY = Math.random()*4
-    const gapHeight = Math.max(Math.random()*10, 3);
+    let newGapY = Math.random() * 4
+    const gapHeight = Math.max(Math.random() * 10, 3);
     const x = gridSize;
     return { x, gapY: newGapY, gapHeight: gapHeight };
 }
@@ -18,16 +18,22 @@ function init() {
     let playerPos = [5, 5];
     let obstacles = []
     let cells = []
-    let lastObstacleGapY = 6;
-    const minDistanceBetweenObstacles = 4;
+    const minDistanceBetweenObstacles = 2;
 
+    function animateBird() {
+        const img = ["./Assets/bird1.png", "./Assets/bird2.png", "./Assets/bird3.png"];
+
+        currentimg = (currentimg + 1) % img.length; // increment currentimg, wrapping around to 0 when it reaches the end
+        birdElem.style.backgroundImage = `url(${img[currentimg]})`;
+        birdElem.style.backgroundSize = "cover";
+    }
     function createGrid() {
         //remove previous grid by emptying ALL the elements
         gridElem.innerHTML = "";
         cells = [];
         playerPos = [5, 5];
         obstacles = [];
-        playerPos = [5,5];
+        playerPos = [5, 5];
 
         gridElem.style.width = `${gridSizePx}px`;
         gridElem.style.height = `${gridSizePx}px`;
@@ -85,38 +91,39 @@ function init() {
         renderObstacles();
     }
     function checkForCollision() {
-        if( playerPos[0] < 0 || playerPos[0] >= gridSize || playerPos[1] < 0 || playerPos[1] >= gridSize) {
+        if (playerPos[0] < 1 || playerPos[0] >= gridSize-1 || playerPos[1] < 1 || playerPos[1] >= gridSize-1) {
             return true; // out of bounds
         }
-        if(cells[playerPos[0]][playerPos[1]].classList.contains("obstacle")) {
+        if (cells[playerPos[0]][playerPos[1]].classList.contains("obstacle")) {
             return true; // collision
         }
         return false
     }
 
     function update() {
-        if(gameRunning == false) {
+        if (gameRunning == false) {
             return;
         }
         movePlayer(0, -1); // gravity
         updateObstacles();
-        if(checkForCollision() == true){
+        if (checkForCollision() == true) {
             gameRunning = false;
             console.log("Game Over");
         }
+        // animateBird();
     }
     function start() {
         createGrid();
         updatePlayerPosition();
     }
 
-    function handleUserInput(e){
-        
+    function handleUserInput(e) {
+
     }
     start()
     setInterval(update, 300);
     window.addEventListener("keydown", (e) => {
-        if(gameRunning == false) {
+        if (gameRunning == false) {
             return;
         }
         switch (e.key) {
@@ -129,7 +136,7 @@ function init() {
         }
     });
     window.addEventListener("click", (e) => {
-        if(gameRunning == false) {
+        if (gameRunning == false) {
             return;
         }
         movePlayer(0, 2);
