@@ -58,6 +58,7 @@ button, select, option{
     background-color: #f0f0f0;
     transition: ease-in-out 0.3s;
 }
+
 button:hover, select:hover, option:hover{
     margin: 5px;
     margin-top: 20px;
@@ -92,7 +93,12 @@ h2{
 }
 
 
-
+#sound-text{
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    color: #333;
+}
 
 /* https://www.w3schools.com/howto/howto_js_popup.asp */
 /* Popup container */
