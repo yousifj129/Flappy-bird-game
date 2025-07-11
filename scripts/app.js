@@ -214,9 +214,18 @@ function init() {
     }
     function update() {
         timer += updateInterval;
+        
         if (gameRunning == false) {
             startButtonElem.textContent = "Start Game";
+            if(difficultySelectElem.disabled == true) {
+                    difficultySelectElem.disabled = false;
+            }
             return;
+        }
+        else{
+            if(difficultySelectElem.disabled == false) {
+            difficultySelectElem.disabled = true;
+        }
         }
         startButtonElem.textContent = "Restart Game";
         movePlayer(0, -1); // gravity
@@ -274,11 +283,7 @@ function init() {
     });
     startButtonElem.addEventListener("click", () => {
         gameRunning = true;
-        gridElem.focus();
         start();
-    })
-    window.addEventListener("click", function () {
-        gridElem.focus();
     })
 
 }
