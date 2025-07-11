@@ -73,7 +73,7 @@ function init() {
     function updateCSSRule(selector, property, value) {
         selector = selector.toLowerCase();
         property = property.toLowerCase();
-        value = value.toLowerCase();
+        value = value
         for (let i = 0; i < document.styleSheets.length; i++) {
             let sheet = document.styleSheets[i];
 

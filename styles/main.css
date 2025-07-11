@@ -35,7 +35,7 @@ body{
 .player{
     width: 55px;
     height: 55px;
-    background-image: url("../Assets/bird1.png");
+    background-image: url("../Assets/bird1.png"), url("../Assets/bird2.png"), url("../Assets/bird3.png");
     background-size: cover;
 }
 .cell.player.obstacle{
