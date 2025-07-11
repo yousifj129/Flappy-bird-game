@@ -21,6 +21,11 @@
       <span class="popuptext" id="myPopup">You have to avoid obstacles and survive for 30 seconds! <br> you can jump by
         clicking on the screen or pressing w or the up arrow</span>
     </button>
+    <div style="display: flex; flex-direction: column; align-items: center;  margin: 5px;
+    margin-top: 20px">
+      <label for="sound-slider">Sound Volume</label>
+      <input type="range" min="0" max="1" value="0.5" id="sound-slider" step="0.1">
+    </div>
     <select id="difficulty-select">
       <option value="easy">Easy</option>
       <option value="medium">Medium</option>
@@ -29,7 +34,9 @@
     <button id="start-button">Start Game</button>
 
   </div>
-
+  <audio src="./Assets//jump sound.mp3" id="jump-sound"></audio>
+  <audio src="./Assets//hitSound.mp3" id="hit-sound"></audio>
+  <audio src="./Assets//birds-by-the-road-in-the-city-birds-cars-highway-noise-13638.mp3" id="background-music" loop></audio>
 </body>
 <script type="text/javascript">
 

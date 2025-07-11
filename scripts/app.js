@@ -1,10 +1,10 @@
 // the reason why I have some variables here is because I want to access them in the console
 const gridSize = 15; // grid (10x10)
 let gridSizePx = 800; // must be the same as the css width and height
-if(window.innerWidth   <= 800){
+if (window.innerWidth <= 800) {
     gridSizePx = window.innerWidth - 100;
 }
-if (window.innerHeight <= 720){
+if (window.innerHeight <= 720) {
     gridSizePx = window.innerHeight - 200;
 }
 
@@ -15,7 +15,9 @@ let gapHeightObstacles = 10;
 let gapSizeMin = 3;
 let timer = 0;
 let updateInterval = 300; // ms
-console.log(window.innerWidth );
+let soundVolume = 0.5;
+
+console.log(window.innerWidth);
 
 
 const difficultiesList = {
@@ -23,19 +25,19 @@ const difficultiesList = {
         minDistanceBetweenObstacles: 5,
         gapHeightObstacles: 12,
         gapSizeMin: 4,
-        updateInterval: 300 
+        updateInterval: 300
     },
     "medium": {
         minDistanceBetweenObstacles: 3,
         gapHeightObstacles: 9,
         gapSizeMin: 3,
-        updateInterval: 250 
+        updateInterval: 250
     },
     "hard": {
         minDistanceBetweenObstacles: 2,
         gapHeightObstacles: 6,
         gapSizeMin: 2,
-        updateInterval: 200 
+        updateInterval: 200
     }
 }
 let currentDifficulty = "medium";
@@ -46,11 +48,24 @@ function generateRandomObstacle() {
     const x = gridSize;
     return { x, gapY: newGapY, gapHeight: gapHeight };
 }
+function playSound(soundElem, volume = 0.5) {
+    soundElem.volume = volume * soundVolume; // set volume based on the slider
+    if (soundElem.paused) {
+        soundElem.currentTime = 0;
+        soundElem.play();
+    } else {
+        soundElem.currentTime = 0;
+    }
+}
 function init() {
     const gridElem = document.querySelector(".grid")
     const startButtonElem = document.getElementById("start-button");
     const displayTextElem = document.getElementById("displayText");
     const difficultySelectElem = document.getElementById("difficulty-select");
+    const jumpSoundElem = document.getElementById("jump-sound");
+    const hitSoundElem = document.getElementById("hit-sound");
+    const backgroundSoundElem = document.getElementById("background-music");
+    const volumeSliderElem = document.getElementById("sound-slider");
     let playerPos = [5, 5];
     let obstacles = []
     let cells = []
@@ -64,7 +79,7 @@ function init() {
         value = value.toLowerCase();
         for (let i = 0; i < document.styleSheets.length; i++) {
             let sheet = document.styleSheets[i];
-            
+
             try {
                 let rules = sheet.cssRules || sheet.rules;
                 for (let j = 0; j < rules.length; j++) {
@@ -74,16 +89,16 @@ function init() {
                         return;
                     }
                 }
-                
+
                 sheet.insertRule(`${selector} { ${property}: ${value}; }`, rules.length);
                 return;
-                
+
             } catch (e) {
                 continue;
             }
         }
     }
-    
+
     function createGrid() {
         timer = 0;
         //remove previous grid by emptying ALL the elements
@@ -91,7 +106,7 @@ function init() {
         cells = [];
         playerPos = [5, 5];
         obstacles = [];
-        
+
         gridElem.style.width = `${gridSizePx}px`;
         gridElem.style.height = `${gridSizePx}px`;
         for (let i = 0; i < gridSize; i++) {
@@ -138,7 +153,7 @@ function init() {
     }
     function animateBird() {
         const img = ["../Assets/bird1.png", "../Assets/bird2.png", "../Assets/bird3.png"];
-        
+
         currentimg = (currentimg + 1) % img.length; // fun trick to cycle, when image reaches 2, this will reset it to 0 because (2+1) % 3 = 0
         updateCSSRule(".player", "background-image", `url(${img[currentimg]})`);
     }
@@ -204,34 +219,39 @@ function init() {
         displayTextElem.textContent = `Timer: ${Math.floor(timer / 1000)}s`;
 
         if (checkForCollision() == true) {
+            playSound(hitSoundElem,0.7);
+            backgroundSoundElem.pause()
             gameRunning = false;
-            displayTextElem.innerText = `Game Over! Click the start button to play again` + "\n" + `You survived for ${Math.floor(timer / 1000)} seconds`;
+            displayTextElem.innerText = `Game Over! Click on start or jump to play again` + "\n" + `You survived for ${Math.floor(timer / 1000)} seconds`;
         }
         animateBird();
         if (timer / 1000 >= 30) {
-            displayTextElem.innerText = `You win! Click the start button to play again`;
+            displayTextElem.innerText = `You win! Click on start or jump to play again`;
             gameRunning = false;
         }
     }
     function start() {
+        if(gameRunning){
+        playSound(backgroundSoundElem, 0.2);
+
+        }
         clearInterval(intrevalID);
         updateDifficulty();
         createGrid();
         updatePlayerPosition();
-        intrevalID =  setInterval(update, updateInterval);
+        intrevalID = setInterval(update, updateInterval);
     }
     start()
     window.addEventListener("keydown", (e) => {
-        if (gameRunning == false) {
-            return;
-        }
-        switch (e.key) {
-            case "ArrowUp":
-                movePlayer(0, 2);
-                break;
-            case "w":
-                movePlayer(0, 2);
-                break;
+
+        if (e.key == "ArrowUp" || e.key == "w" || e.key == " ") {
+
+            if (gameRunning == false) {
+                gameRunning = true;
+                start()
+            }
+            movePlayer(0, 2);
+            playSound(jumpSoundElem);
         }
     });
     window.addEventListener("click", (e) => {
@@ -239,6 +259,11 @@ function init() {
             return;
         }
         movePlayer(0, 2);
+        playSound(jumpSoundElem);
+
+    });
+    volumeSliderElem.addEventListener("input", (e) => {
+        soundVolume = e.target.value;
     });
     startButtonElem.addEventListener("click", () => {
         gameRunning = true;
