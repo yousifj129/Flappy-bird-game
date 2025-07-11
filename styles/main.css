@@ -78,8 +78,6 @@ h2{
   position: relative;
   display: inline-block;
   cursor: pointer;
-  font-size: large;
-  padding: 5px;
 }
 
 /* The actual popup (appears on top) */

@@ -1,8 +1,11 @@
 // the reason why I have some variables here is because I want to access them in the console
 const gridSize = 15; // grid (10x10)
-let gridSizePx = 700; // must be the same as the css width and height
+let gridSizePx = 800; // must be the same as the css width and height
 if(window.innerWidth   <= 800){
     gridSizePx = window.innerWidth - 100;
+}
+if (window.innerHeight <= 720){
+    gridSizePx = window.innerHeight - 200;
 }
 
 const cellSize = (gridSizePx / gridSize);
@@ -30,7 +33,7 @@ const difficultiesList = {
     },
     "hard": {
         minDistanceBetweenObstacles: 2,
-        gapHeightObstacles: 5,
+        gapHeightObstacles: 6,
         gapSizeMin: 2,
         updateInterval: 200 
     }
@@ -61,7 +64,7 @@ function init() {
         value = value.toLowerCase();
         for (let i = 0; i < document.styleSheets.length; i++) {
             let sheet = document.styleSheets[i];
-
+            
             try {
                 let rules = sheet.cssRules || sheet.rules;
                 for (let j = 0; j < rules.length; j++) {
@@ -71,22 +74,16 @@ function init() {
                         return;
                     }
                 }
-
+                
                 sheet.insertRule(`${selector} { ${property}: ${value}; }`, rules.length);
                 return;
-
+                
             } catch (e) {
                 continue;
             }
         }
     }
-
-    function animateBird() {
-        const img = ["../Assets/bird1.png", "../Assets/bird2.png", "../Assets/bird3.png"];
-
-        currentimg = (currentimg + 1) % img.length; // fun trick to cycle, when image reaches 2, this will reset it to 0 because (2+1) % 3 = 0
-        updateCSSRule(".player", "background-image", `url(${img[currentimg]})`);
-    }
+    
     function createGrid() {
         timer = 0;
         //remove previous grid by emptying ALL the elements
@@ -94,7 +91,7 @@ function init() {
         cells = [];
         playerPos = [5, 5];
         obstacles = [];
-
+        
         gridElem.style.width = `${gridSizePx}px`;
         gridElem.style.height = `${gridSizePx}px`;
         for (let i = 0; i < gridSize; i++) {
@@ -109,6 +106,41 @@ function init() {
             }
             cells.push(row);
         }
+    }
+    function updateDifficulty() {
+        currentDifficulty = difficultySelectElem.value;
+        switch (currentDifficulty) {
+            case "easy":
+                minDistanceBetweenObstacles = difficultiesList.easy.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.easy.gapHeightObstacles;
+                gapSizeMin = difficultiesList.easy.gapSizeMin;
+                updateInterval = difficultiesList.easy.updateInterval;
+                break;
+            case "medium":
+                minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
+                gapSizeMin = difficultiesList.medium.gapSizeMin;
+                updateInterval = difficultiesList.medium.updateInterval;
+                break;
+            case "hard":
+                minDistanceBetweenObstacles = difficultiesList.hard.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.hard.gapHeightObstacles;
+                gapSizeMin = difficultiesList.hard.gapSizeMin;
+                updateInterval = difficultiesList.hard.updateInterval;
+                break;
+            default:
+                minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
+                gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
+                gapSizeMin = difficultiesList.medium.gapSizeMin;
+                updateInterval = difficultiesList.medium.updateInterval;
+                break;
+        }
+    }
+    function animateBird() {
+        const img = ["../Assets/bird1.png", "../Assets/bird2.png", "../Assets/bird3.png"];
+        
+        currentimg = (currentimg + 1) % img.length; // fun trick to cycle, when image reaches 2, this will reset it to 0 because (2+1) % 3 = 0
+        updateCSSRule(".player", "background-image", `url(${img[currentimg]})`);
     }
     function movePlayer(x, y) {
         const newX = playerPos[0] + x;
@@ -181,35 +213,6 @@ function init() {
             gameRunning = false;
         }
     }
-    function updateDifficulty() {
-        currentDifficulty = difficultySelectElem.value;
-        switch (currentDifficulty) {
-            case "easy":
-                minDistanceBetweenObstacles = difficultiesList.easy.minDistanceBetweenObstacles;
-                gapHeightObstacles = difficultiesList.easy.gapHeightObstacles;
-                gapSizeMin = difficultiesList.easy.gapSizeMin;
-                updateInterval = difficultiesList.easy.updateInterval;
-                break;
-            case "medium":
-                minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
-                gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
-                gapSizeMin = difficultiesList.medium.gapSizeMin;
-                updateInterval = difficultiesList.medium.updateInterval;
-                break;
-            case "hard":
-                minDistanceBetweenObstacles = difficultiesList.hard.minDistanceBetweenObstacles;
-                gapHeightObstacles = difficultiesList.hard.gapHeightObstacles;
-                gapSizeMin = difficultiesList.hard.gapSizeMin;
-                updateInterval = difficultiesList.hard.updateInterval;
-                break;
-            default:
-                minDistanceBetweenObstacles = difficultiesList.medium.minDistanceBetweenObstacles;
-                gapHeightObstacles = difficultiesList.medium.gapHeightObstacles;
-                gapSizeMin = difficultiesList.medium.gapSizeMin;
-                updateInterval = difficultiesList.medium.updateInterval;
-                break;
-        }
-    }
     function start() {
         clearInterval(intrevalID);
         updateDifficulty();
@@ -245,6 +248,7 @@ function init() {
 
 }
 
+// took this from https://www.w3schools.com/howto/howto_js_popup.asp
 function showInstructions() {
     let popup = document.getElementById("myPopup");
     popup.classList.toggle("show");
