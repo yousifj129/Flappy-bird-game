@@ -27,3 +27,9 @@
     transition:linear;
     transition-duration: 0.5s;
 }
+.obstacle{
+    width: 55px;
+    height: 55px;
+    background-color: green;
+    background-size: cover;
+}
