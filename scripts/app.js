@@ -230,7 +230,7 @@ function init() {
         startButtonElem.textContent = "Restart Game";
         movePlayer(0, -1); // gravity
         updateObstacles();
-        displayTextElem.textContent = `Timer: ${Math.floor(timer / 1000)}s`;
+        displayTextElem.innerText = `The Game Started!\nTimer: ${Math.floor(timer / 1000)}s`;
 
         winOrLose();
         animateBird();
