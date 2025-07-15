@@ -7,13 +7,13 @@
   <title>Flappy Bird</title>
   <script src="scripts/app.js"></script>
   <link rel="stylesheet" href="styles/main.css" />
-  
+  <link rel="shortcut icon" href="Assets/bird1.png" type="image/x-icon">
 </head>
 
 <body>
 
   <h2 id="displayText">To play <br>click on start</h2>
-
+  
   <div class="grid-wrapper">
     <div class="grid"></div>
   </div>
@@ -22,6 +22,8 @@
     margin-top: 20px">
       <p id="sound-text">Sound Volume</p>
       <input type="range" min="0" max="1" value="0.5" id="sound-slider" step="0.1">
+      <p id="sound-text">Infinite Mode</p>
+      <input id="infiniteMode" type="checkbox"></input>
     </div>
     <button class="popup" onclick="showInstructions()">How To Play
       <span class="popuptext" id="myPopup">You have to avoid obstacles and survive for 30 seconds! <br> you can jump by
@@ -32,6 +34,7 @@
       <option value="medium">Medium</option>
       <option value="hard">Hard</option>
     </select>
+     
     <button id="start-button" aria-label="Start game">Start Game</button>
     
 

@@ -5,7 +5,7 @@ if (window.innerWidth <= 900) {
     gridSizePx = window.innerWidth - 100;
 }
 if (window.innerHeight <= 720) {
-    gridSizePx = window.innerHeight - 200;
+    gridSizePx = window.innerHeight - 230;
 }
 
 const cellSize = (gridSizePx / gridSize);
@@ -16,7 +16,8 @@ let gapSizeMin = 3;
 let timer = 0;
 let updateInterval = 300; // ms
 let soundVolume = 0.5;
-
+let canTakeInput = true;
+let infiniteMode = false;
 const difficultiesList = {
     "easy": {
         minDistanceBetweenObstacles: 5,
@@ -37,6 +38,7 @@ const difficultiesList = {
         updateInterval: 200
     }
 }
+
 let currentDifficulty = "medium";
 
 function generateRandomObstacle() {
@@ -209,38 +211,48 @@ function init() {
             playSound(hitSoundElem, 0.7);
             backgroundSoundElem.pause()
             gameRunning = false;
-            displayTextElem.innerText = `Game Over! Click on start or jump to play again` + "\n" + `You survived for ${Math.floor(timer / 1000)} seconds`;
+            canTakeInput = false
+            setTimeout(() => {
+                canTakeInput = true;
+            }, 1000);
+            displayTextElem.innerText = `Game Over! Click on start or jump to play again` + "\n" + `You went as far as ${Math.floor(timer / 1000)} meters!`;
         }
     }
     function update() {
         timer += updateInterval;
-        
+
         if (gameRunning == false) {
             startButtonElem.textContent = "Start Game";
-            if(difficultySelectElem.disabled == true) {
-                    difficultySelectElem.disabled = false;
+            if (difficultySelectElem.disabled == true) {
+                difficultySelectElem.disabled = false;
             }
             return;
         }
-        else{
-            if(difficultySelectElem.disabled == false) {
-            difficultySelectElem.disabled = true;
-        }
+        else {
+            if (difficultySelectElem.disabled == false) {
+                difficultySelectElem.disabled = true;
+            }
         }
         startButtonElem.textContent = "Restart Game";
         movePlayer(0, -1); // gravity
         updateObstacles();
-        displayTextElem.innerText = `The Game Started!\nTimer: ${Math.floor(timer / 1000)}s`;
+        displayTextElem.innerText = `The Game Started!\n distance: ${Math.floor(timer / 1000)}m`;
 
         winOrLose();
         animateBird();
-        if (timer / 1000 >= 30) {
+        if (timer / 1000 >= 30 && !infiniteMode) {
             backgroundSoundElem.pause();
             displayTextElem.innerText = `You win! Click on start or jump to play again`;
+            canTakeInput = false
+            setTimeout(() => {
+                canTakeInput = true;
+            }, 1000);
             gameRunning = false;
         }
     }
     function start() {
+        infiniteMode = document.querySelector("#infiniteMode").checked
+
         if (gameRunning) {
             playSound(backgroundSoundElem, 0.3);
 
@@ -253,17 +265,19 @@ function init() {
     }
     start()
     window.addEventListener("keydown", (e) => {
+        if (canTakeInput) {
+            if (e.key == "ArrowUp" || e.key == "w" || e.key == " ") {
 
-        if (e.key == "ArrowUp" || e.key == "w" || e.key == " ") {
-
-            if (gameRunning == false) {
-                gameRunning = true;
-                start()
+                if (gameRunning == false) {
+                    gameRunning = true;
+                    start()
+                }
+                movePlayer(0, 2);
+                playSound(jumpSoundElem);
+                winOrLose();
             }
-            movePlayer(0, 2);
-            playSound(jumpSoundElem);
-            winOrLose();
         }
+
 
     });
     window.addEventListener("click", () => {
