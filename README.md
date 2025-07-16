@@ -4,10 +4,6 @@
 ## About The Project
 ![alt text](./Assets/Screenshot.png)
 This game is my replica of the good old Flappy Bird game, which was taken down by its developer idk how many years ago. I made it as my first project in GA (General Assembly)
-<a href="https://ma9ici4n.itch.io/pixel-art-bird-16x16">source of bird image<a>
-<a href="https://github.com/autruonggiang/build-a-flappy-bird-clone-with-phaser">source of background<a>
-<a href="https://poppop.ai/ai-sound-effect-generator">source of sound effects<a>
-<a href="https://poppop.ai/sound-effects/jump-sound">source of background music<a>
 
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
@@ -42,18 +38,14 @@ This game is my replica of the good old Flappy Bird game, which was taken down b
 <br />
 <div align="center">
   <a href="https://github.com/yousifj129/Flappy-bird-game">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="./Assets/bird2.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Flappy Bird</h3>
 
   <p align="center">
-    project_description
     <br />
-    <a href="https://github.com/yousifj129/Flappy-bird-game"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/yousifj129/Flappy-bird-game">View Demo</a>
+    <a href="https://yousifj129.github.io/Flappy-bird-game/">View Demo</a>
     &middot;
     <a href="https://github.com/yousifj129/Flappy-bird-game/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
@@ -170,9 +162,10 @@ Project Link: [https://github.com/yousifj129/Flappy-bird-game](https://github.co
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* <a href="https://ma9ici4n.itch.io/pixel-art-bird-16x16">source of bird image<a>
+* <a href="https://github.com/autruonggiang/build-a-flappy-bird-clone-with-phaser">source of background<a>
+* <a href="https://poppop.ai/ai-sound-effect-generator">source of sound effects<a>
+* <a href="https://poppop.ai/sound-effects/jump-sound">source of background music<a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
