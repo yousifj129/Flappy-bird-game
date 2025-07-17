@@ -129,7 +129,7 @@ Project Link: [https://github.com/yousifj129/Flappy-bird-game](https://github.co
 
 
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## Attributions
 
 * <a href="https://ma9ici4n.itch.io/pixel-art-bird-16x16">source of bird image<a>
 * <a href="https://github.com/autruonggiang/build-a-flappy-bird-clone-with-phaser">source of background<a>
@@ -139,6 +139,11 @@ Project Link: [https://github.com/yousifj129/Flappy-bird-game](https://github.co
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+## Next Step
+
+* making different levels and different obstacles
+* using the canvas tag
+* adding best score for infinite mode and saving it in local storage
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
